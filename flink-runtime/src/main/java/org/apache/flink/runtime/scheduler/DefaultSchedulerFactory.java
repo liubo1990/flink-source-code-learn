@@ -114,6 +114,9 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                         shuffleMaster,
                         partitionTracker);
 
+        /**
+         * 在父类SchedulerBase的构造方法中将jobGraph转换为executionGraph
+         */
         return new DefaultScheduler(
                 log,
                 jobGraph,

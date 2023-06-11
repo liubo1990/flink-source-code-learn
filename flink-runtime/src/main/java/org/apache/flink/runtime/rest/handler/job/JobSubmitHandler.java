@@ -118,6 +118,9 @@ public final class JobSubmitHandler
         CompletableFuture<JobGraph> finalizedJobGraphFuture =
                 uploadJobGraphFiles(gateway, jobGraphFuture, jarFiles, artifacts, configuration);
 
+        /**
+         * 通过DispatcherGateway将jobgraph提交给dispatcher
+         */
         CompletableFuture<Acknowledge> jobSubmissionFuture =
                 finalizedJobGraphFuture.thenCompose(
                         jobGraph -> gateway.submitJob(jobGraph, timeout));

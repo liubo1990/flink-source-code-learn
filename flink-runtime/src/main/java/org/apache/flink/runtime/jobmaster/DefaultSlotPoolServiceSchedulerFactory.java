@@ -107,6 +107,11 @@ public final class DefaultSlotPoolServiceSchedulerFactory
             FatalErrorHandler fatalErrorHandler,
             JobStatusListener jobStatusListener)
             throws Exception {
+        /**
+         * 此处的schedulerNGFactory = DefaultSchedulerFactory
+         * 调用DefaultSchedulerFactory的createInstance方法时，会通过构造方法创建DefaultScheduler
+         * 而在创建DefaultScheduler时，在其父类SchedulerBase的构造方法中将jobGraph转换为executionGraph
+         */
         return schedulerNGFactory.createInstance(
                 log,
                 jobGraph,

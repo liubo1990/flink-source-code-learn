@@ -88,6 +88,16 @@ public class DefaultDispatcherResourceManagerComponentFactory
 
     @Nonnull private final RestEndpointFactory<?> restEndpointFactory;
 
+    /**
+     * 在构造方法中传入jobmanager中三大组件对应的工厂，然后在create方法中创建并启动这三大组件服务：dispatcher、resourcemanager、webmonitorendpoint
+     *
+     * 在本类的两个静态方法和ApplicationClusterEntryPoint中被调用
+     * ApplicationClusterEntryPoint的实现类有YarnApplicationClusterEntryPoint，StandaloneApplicationClusterEntryPoint，KubernetesApplicationClusterEntrypoint.
+     *
+     * @param dispatcherRunnerFactory
+     * @param resourceManagerFactory
+     * @param restEndpointFactory
+     */
     public DefaultDispatcherResourceManagerComponentFactory(
             @Nonnull DispatcherRunnerFactory dispatcherRunnerFactory,
             @Nonnull ResourceManagerFactory<?> resourceManagerFactory,
@@ -97,6 +107,22 @@ public class DefaultDispatcherResourceManagerComponentFactory
         this.restEndpointFactory = restEndpointFactory;
     }
 
+    /**liub
+     * 创建并启动jobmanager中的三大组件服务：dispatcher、resourcemanager、webmonitorendpoint.
+     *
+     * @param configuration
+     * @param ioExecutor
+     * @param rpcService
+     * @param highAvailabilityServices
+     * @param blobServer
+     * @param heartbeatServices
+     * @param metricRegistry
+     * @param executionGraphInfoStore
+     * @param metricQueryServiceRetriever
+     * @param fatalErrorHandler
+     * @return
+     * @throws Exception
+     */
     @Override
     public DispatcherResourceManagerComponent create(
             Configuration configuration,
@@ -157,6 +183,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
                                     dispatcherGatewayRetriever,
                                     executor);
 
+            //1.创建并启动webMonitorEndpoint
             webMonitorEndpoint =
                     restEndpointFactory.createRestEndpoint(
                             configuration,
@@ -173,6 +200,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
 
             final String hostname = RpcUtils.getHostname(rpcService);
 
+            // 2.创建resourceManager
             resourceManagerService =
                     ResourceManagerServiceImpl.create(
                             resourceManagerFactory,
@@ -207,6 +235,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
                             metricRegistry.getMetricQueryServiceGatewayRpcAddress(),
                             ioExecutor);
 
+            // 3.创建并启动dispatcher
             log.debug("Starting Dispatcher.");
             dispatcherRunner =
                     dispatcherRunnerFactory.createDispatcherRunner(
@@ -217,6 +246,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
                             rpcService,
                             partialDispatcherServices);
 
+            // 启动resourceManager
             log.debug("Starting ResourceManagerService.");
             resourceManagerService.start();
 
@@ -277,6 +307,12 @@ public class DefaultDispatcherResourceManagerComponentFactory
         }
     }
 
+    /**
+     * liub 在MiniCluster和StandaloneSessionClusterEntrypoint,KubernetesSessionClusterEntrypoint,YarnSessionClusterEntrypoint中被调用。
+     *
+     * @param resourceManagerFactory
+     * @return
+     */
     public static DefaultDispatcherResourceManagerComponentFactory createSessionComponentFactory(
             ResourceManagerFactory<?> resourceManagerFactory) {
         return new DefaultDispatcherResourceManagerComponentFactory(
@@ -286,6 +322,13 @@ public class DefaultDispatcherResourceManagerComponentFactory
                 SessionRestEndpointFactory.INSTANCE);
     }
 
+    /**
+     * liub 在YarnJobClusterEntrypoint中被调用。
+     *
+     * @param resourceManagerFactory
+     * @param jobGraphRetriever
+     * @return
+     */
     public static DefaultDispatcherResourceManagerComponentFactory createJobComponentFactory(
             ResourceManagerFactory<?> resourceManagerFactory, JobGraphRetriever jobGraphRetriever) {
         return new DefaultDispatcherResourceManagerComponentFactory(

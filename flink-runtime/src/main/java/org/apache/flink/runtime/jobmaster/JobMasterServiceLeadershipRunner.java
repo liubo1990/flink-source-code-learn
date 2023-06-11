@@ -243,6 +243,10 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
         }
     }
 
+    /**
+     * 完成leader选举后，选举成功则执行grantLeadership方法
+     * @param leaderSessionID New leader session ID
+     */
     @Override
     public void grantLeadership(UUID leaderSessionID) {
         runIfStateRunning(
@@ -275,6 +279,9 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
         if (jobSchedulingStatus == RunningJobsRegistry.JobSchedulingStatus.DONE) {
             jobAlreadyDone();
         } else {
+            /**
+             * 创建一个JobMaster来处理jobgraph
+             */
             createNewJobMasterServiceProcess(leaderSessionId);
         }
     }

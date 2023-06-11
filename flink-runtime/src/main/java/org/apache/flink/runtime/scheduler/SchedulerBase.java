@@ -186,6 +186,9 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 SchedulerUtils.createCheckpointIDCounterIfCheckpointingIsEnabled(
                         jobGraph, checkNotNull(checkpointRecoveryFactory));
 
+        /**
+         * 将jobgraph转换为executionGraph
+         */
         this.executionGraph =
                 createAndRestoreExecutionGraph(
                         completedCheckpointStore,
@@ -330,6 +333,10 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             JobStatusListener jobStatusListener)
             throws Exception {
 
+        /**
+         * 此处的 executionGraphFactory=DefaultExecutionGraphFactory
+         * 将jobGraph转换为ExecutionGraph
+         */
         final ExecutionGraph newExecutionGraph =
                 executionGraphFactory.createAndRestoreExecutionGraph(
                         jobGraph,

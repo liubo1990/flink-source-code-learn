@@ -464,6 +464,9 @@ public class RestClient implements AutoCloseableAsync {
 
     private <P extends ResponseBody> CompletableFuture<P> submitRequest(
             String targetAddress, int targetPort, Request httpRequest, JavaType responseType) {
+        /**连接WebMonitorEndpoint(=DispatcherRestEndpoint)得到对应的channel。
+         *
+         */
         final ChannelFuture connectFuture = bootstrap.connect(targetAddress, targetPort);
 
         final CompletableFuture<Channel> channelFuture = new CompletableFuture<>();
@@ -490,6 +493,9 @@ public class RestClient implements AutoCloseableAsync {
                                     throw new IOException(
                                             "Netty pipeline was not properly initialized.");
                                 } else {
+                                    /**通过channel将封装好的http请求发送给WebMonitorEndpoint(=DispatcherRestEndpoint)
+                                     *
+                                     */
                                     httpRequest.writeTo(channel);
                                     future = handler.getJsonFuture();
                                     success = true;
