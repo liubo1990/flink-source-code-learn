@@ -91,6 +91,7 @@ public class DefaultJobMasterServiceFactory implements JobMasterServiceFactory {
 
         return CompletableFuture.supplyAsync(
                 FunctionUtils.uncheckedSupplier(
+                        // 创建并启动jobMaster
                         () -> internalCreateJobMasterService(leaderSessionId, onCompletionActions)),
                 executor);
     }
@@ -98,9 +99,7 @@ public class DefaultJobMasterServiceFactory implements JobMasterServiceFactory {
     private JobMasterService internalCreateJobMasterService(
             UUID leaderSessionId, OnCompletionActions onCompletionActions) throws Exception {
 
-        /**
-         * 创建JobMaster
-         */
+        /** 创建JobMaster 在JobMaster的构造方法中，创建Scheduler时，会将jobgraph转换为executionGraph */
         final JobMaster jobMaster =
                 new JobMaster(
                         rpcService,
@@ -124,9 +123,7 @@ public class DefaultJobMasterServiceFactory implements JobMasterServiceFactory {
                         DefaultExecutionDeploymentReconciler::new,
                         initializationTimestamp);
 
-        /**
-         * 启动JobMaster
-         */
+        /** 启动JobMaster */
         jobMaster.start();
 
         return jobMaster;

@@ -240,8 +240,8 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
     private void runCluster(Configuration configuration, PluginManager pluginManager)
             throws Exception {
         synchronized (lock) {
-            /**1.初始化各种服务haServices,heartbeatServices,RpcService,blobServer,ioExecutor,metricRegistry,executionGraphInfoStore等.
-             *
+            /**
+             * 1.初始化各种服务haServices,heartbeatServices,RpcService,blobServer,ioExecutor,metricRegistry,executionGraphInfoStore等.
              */
             initializeServices(configuration, pluginManager);
 
@@ -249,17 +249,15 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
             configuration.setString(JobManagerOptions.ADDRESS, commonRpcService.getAddress());
             configuration.setInteger(JobManagerOptions.PORT, commonRpcService.getPort());
 
-            /**2.调用ClusterEntrypoint实现类的createDispatcherResourceManagerComponentFactory方法
+            /**
+             * 2.调用ClusterEntrypoint实现类的createDispatcherResourceManagerComponentFactory方法
              * 不同实现类会传入三大组件不同的工厂实例
-             *
              */
             final DispatcherResourceManagerComponentFactory
                     dispatcherResourceManagerComponentFactory =
                             createDispatcherResourceManagerComponentFactory(configuration);
 
-            /**3.创建并启动jobmanager的三大组件服务：dispatcher、resourcemanager、webmonitorendpoint
-             *
-             */
+            /** 3.创建并启动jobmanager的三大组件服务：dispatcher、resourcemanager、webmonitorendpoint */
             clusterComponent =
                     dispatcherResourceManagerComponentFactory.create(
                             configuration,

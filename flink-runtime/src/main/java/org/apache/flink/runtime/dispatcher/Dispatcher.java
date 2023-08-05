@@ -374,9 +374,7 @@ public abstract class Dispatcher extends PermanentlyFencedRpcEndpoint<Dispatcher
     private CompletableFuture<Acknowledge> internalSubmitJob(JobGraph jobGraph) {
         log.info("Submitting job '{}' ({}).", jobGraph.getName(), jobGraph.getJobID());
 
-        /**
-         * 存储并运行jobgraph，主要是persistAndRunJob方法
-         */
+        /** 存储并运行jobgraph，主要是persistAndRunJob方法 */
         final CompletableFuture<Acknowledge> persistAndRunFuture =
                 waitForTerminatingJob(jobGraph.getJobID(), jobGraph, this::persistAndRunJob)
                         .thenApply(ignored -> Acknowledge.get());
@@ -404,6 +402,7 @@ public abstract class Dispatcher extends PermanentlyFencedRpcEndpoint<Dispatcher
 
     /**
      * 存储并运行jogGraph
+     *
      * @param jobGraph
      * @throws Exception
      */
@@ -415,9 +414,7 @@ public abstract class Dispatcher extends PermanentlyFencedRpcEndpoint<Dispatcher
     private void runJob(JobGraph jobGraph, ExecutionType executionType) throws Exception {
         Preconditions.checkState(!runningJobs.containsKey(jobGraph.getJobID()));
         long initializationTimestamp = System.currentTimeMillis();
-        /**
-         * 创建JobManagerRunner用于运行jobGraph
-         */
+        /** 创建JobManagerRunner用于运行jobGraph */
         JobManagerRunner jobManagerRunner =
                 createJobManagerRunner(jobGraph, initializationTimestamp);
 
@@ -489,9 +486,10 @@ public abstract class Dispatcher extends PermanentlyFencedRpcEndpoint<Dispatcher
             throws Exception {
         final RpcService rpcService = getRpcService();
 
-        /** 创建一个JobMaster运行jobgraph
-         * 此处的jobManagerRunnerFactory=JobMasterServiceLeadershipRunnerFactory
-         * 返回的 runner=JobMasterServiceLeadershipRunner
+        /**
+         * 创建一个JobMaster运行jobgraph
+         * 此处的jobManagerRunnerFactory=JobMasterServiceLeadershipRunnerFactory 返回的
+         * runner=JobMasterServiceLeadershipRunner
          */
         JobManagerRunner runner =
                 jobManagerRunnerFactory.createJobManagerRunner(

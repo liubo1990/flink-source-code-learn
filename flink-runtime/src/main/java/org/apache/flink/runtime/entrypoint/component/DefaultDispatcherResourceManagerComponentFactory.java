@@ -91,7 +91,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
     /**
      * 在构造方法中传入jobmanager中三大组件对应的工厂，然后在create方法中创建并启动这三大组件服务：dispatcher、resourcemanager、webmonitorendpoint
      *
-     * 在本类的两个静态方法和ApplicationClusterEntryPoint中被调用
+     * <p>在本类的两个静态方法和ApplicationClusterEntryPoint中被调用
      * ApplicationClusterEntryPoint的实现类有YarnApplicationClusterEntryPoint，StandaloneApplicationClusterEntryPoint，KubernetesApplicationClusterEntrypoint.
      *
      * @param dispatcherRunnerFactory
@@ -107,8 +107,8 @@ public class DefaultDispatcherResourceManagerComponentFactory
         this.restEndpointFactory = restEndpointFactory;
     }
 
-    /**liub
-     * 创建并启动jobmanager中的三大组件服务：dispatcher、resourcemanager、webmonitorendpoint.
+    /**
+     * liub 创建并启动jobmanager中的三大组件服务：dispatcher、resourcemanager、webmonitorendpoint.
      *
      * @param configuration
      * @param ioExecutor
@@ -183,7 +183,7 @@ public class DefaultDispatcherResourceManagerComponentFactory
                                     dispatcherGatewayRetriever,
                                     executor);
 
-            //1.创建并启动webMonitorEndpoint
+            // 1.创建并启动webMonitorEndpoint
             webMonitorEndpoint =
                     restEndpointFactory.createRestEndpoint(
                             configuration,
@@ -308,7 +308,8 @@ public class DefaultDispatcherResourceManagerComponentFactory
     }
 
     /**
-     * liub 在MiniCluster和StandaloneSessionClusterEntrypoint,KubernetesSessionClusterEntrypoint,YarnSessionClusterEntrypoint中被调用。
+     * liub
+     * 在MiniCluster和StandaloneSessionClusterEntrypoint,KubernetesSessionClusterEntrypoint,YarnSessionClusterEntrypoint中被调用。
      *
      * @param resourceManagerFactory
      * @return

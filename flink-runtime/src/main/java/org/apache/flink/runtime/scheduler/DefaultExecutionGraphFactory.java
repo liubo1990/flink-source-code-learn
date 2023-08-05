@@ -103,9 +103,7 @@ public class DefaultExecutionGraphFactory implements ExecutionGraphFactory {
                     }
                 };
 
-        /**
-         * 将jobGraph转换为ExecutionGraph
-         */
+        /** 将jobGraph转换为ExecutionGraph */
         final ExecutionGraph newExecutionGraph =
                 DefaultExecutionGraphBuilder.buildGraph(
                         jobGraph,

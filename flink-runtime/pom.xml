@@ -207,7 +207,11 @@ under the License.
 			<artifactId>oshi-core</artifactId>
 			<optional>true</optional>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+    </dependencies>
 
 	<build>
 
